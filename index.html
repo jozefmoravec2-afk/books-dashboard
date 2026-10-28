@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<title>BOOKS · Personal Library</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1018;--panel:#151d2a;--line:#293447;--text:#eef4ff;--muted:#9aaabd;--accent:#62e6a5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0%,#193044,#0b1018 45%);color:var(--text);font:15px system-ui,-apple-system,sans-serif;min-height:100vh}
+main{max-width:1150px;margin:auto;padding:30px 20px}h1{font-size:32px;margin:8px 0}h2{font-size:19px}p,.muted{color:var(--muted)}header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:30px}
+.brand{font-weight:800;letter-spacing:2px;color:var(--accent)}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:0 10px 30px #0002}
+.login{max-width:510px;margin:9vh auto}input,select,textarea{background:#0e1622;border:1px solid #344358;border-radius:10px;padding:12px;color:var(--text);font:inherit;width:100%}
+textarea{min-height:110px}label{display:block;margin:12px 0 5px;color:var(--muted);font-size:13px}button{background:var(--accent);border:0;border-radius:10px;padding:11px 16px;color:#082015;font-weight:750;cursor:pointer}button.secondary{background:#253347;color:var(--text)}button.danger{background:#49272d;color:#ffe2e4}button:disabled{opacity:.5;cursor:wait}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.metric strong{font-size:31px;display:block;margin-top:8px}.metric span{color:var(--muted)}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:18px 0}.book{display:grid;grid-template-columns:1fr auto;gap:12px;padding:16px;border-bottom:1px solid var(--line)}.book:last-child{border:0}.book b{font-size:16px}.tag{display:inline-block;padding:4px 9px;border-radius:20px;background:#233547;color:#aee6cd;font-size:12px;margin-top:8px}.tiny{font-size:12px;color:var(--muted)}.hidden{display:none!important}.notice{border-left:3px solid #e8c36e;padding:10px 14px;background:#292617;border-radius:8px}.split{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}.toolbar,.split{grid-template-columns:1fr}main{padding:18px 12px}}
+</style></head><body><main>
+<section id="gate" class="login card">
+<div class="brand">📚 BOOKS / PRIVATE LIBRARY</div><h1 id="gateTitle">Tvoja knižnica</h1>
+<p id="gateDesc">Zadaj heslo na odomknutie šifrovanej knižnice.</p>
+<label for="password">Heslo</label><input type="password" id="password" autocomplete="current-password" minlength="12">
+<div id="confirmWrap" class="hidden"><label for="confirm">Zopakuj heslo</label><input type="password" id="confirm" autocomplete="new-password"></div>
+<div class="actions" style="margin-top:16px"><button id="unlock">Odomknúť</button><button id="restoreBtn" class="secondary">Importovať šifrovanú zálohu</button></div>
+<p class="tiny" id="gateError" role="alert"></p>
+<div class="notice tiny">Heslo sa neposiela na server. Údaje sú šifrované v prehliadači. Pri prvom nastavení použi rovnaké heslo, aké používaš pre svoj existujúci dashboard. Bez zálohy nie je možné obnoviť údaje po vymazaní prehliadača.</div>
+</section>
+<section id="app" class="hidden">
+<header><div><div class="brand">📚 BOOKS / PERSONAL LIBRARY</div><h1>Moja knižnica</h1><p>Čítaj, premýšľaj, prepájaj.</p></div><div class="actions"><button class="secondary" id="backup">⬇ Šifrovaná záloha</button><button class="secondary" id="lock">🔒 Zamknúť</button></div></header>
+<div class="grid">
+<div class="card metric"><span>Všetky knihy</span><strong id="total">0</strong></div>
+<div class="card metric"><span>Prečítané</span><strong id="done">0</strong></div>
+<div class="card metric"><span>Rozčítané</span><strong id="reading">0</strong></div>
+<div class="card metric"><span>Čakajú na čítanie</span><strong id="todo">0</strong></div>
+</div>
+<div class="split"><div class="card"><h2>Pridať / upraviť knihu</h2>
+<input type="hidden" id="editId"><label>Názov</label><input id="title" maxlength="250"><label>Autor</label><input id="author" maxlength="150">
+<label>Kategória</label><input id="category" placeholder="Filozofia, stratégia..." maxlength="100">
+<label>Stav</label><select id="status"><option value="unread">Neprečítané</option><option value="reading">Rozčítané</option><option value="read">Prečítané</option></select>
+<label>Hlavná myšlienka / poznámky</label><textarea id="notes" maxlength="12000"></textarea>
+<div class="actions" style="margin-top:12px"><button id="saveBook">Uložiť knihu</button><button class="secondary" id="resetForm">Vyčistiť</button></div></div>
+<div class="card"><h2>Reading Intelligence</h2><p>Čo si si z knihy odniesol? Ako sa myšlienka prejavuje v realite? Prečo je dôležitá?</p>
+<div class="notice tiny">Údaje sa ukladajú len v tomto prehliadači, šifrované pomocou AES-GCM. Ak chceš pokračovať na inom zariadení, prenes šifrovanú zálohu.</div>
+<h2 style="margin-top:24px">Import kníh</h2><p class="tiny">Importuje JSON pole objektov s poľami title, author, category, status a notes. Import sa zlúči s knižnicou podľa názvu a autora.</p><button class="secondary" id="importJson">Importovať JSON</button></div></div>
+<div class="card"><h2>Katalóg kníh</h2><div class="toolbar"><input id="search" placeholder="Hľadať názov, autora alebo poznámky"><select id="filter"><option value="all">Všetky stavy</option><option value="read">Prečítané</option><option value="reading">Rozčítané</option><option value="unread">Neprečítané</option></select><select id="sort"><option value="title">Podľa názvu</option><option value="status">Podľa stavu</option><option value="category">Podľa kategórie</option></select></div><div id="books"></div></div>
+</section><input type="file" accept="application/json,.json" id="file" class="hidden">
+</main><script>
+'use strict';
+const STORAGE='books-vault-v1', ITER=600000, encoder=new TextEncoder(), decoder=new TextDecoder();
+const $=id=>document.getElementById(id);
+let data=[], key=null, vault=null, timer=null, busy=false;
+const b64=bytes=>btoa(String.fromCharCode(...bytes));
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const random=n=>crypto.getRandomValues(new Uint8Array(n));
+async function derive(password,salt){const material=await crypto.subtle.importKey('raw',encoder.encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:ITER,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+async function seal(){if(!key)throw Error('Zamknuté');const iv=random(12), plaintext=encoder.encode(JSON.stringify(data));const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,plaintext);vault={version:1,kdf:'PBKDF2-SHA256',iterations:ITER,salt:vault.salt,iv:b64(iv),ciphertext:b64(new Uint8Array(cipher))};localStorage.setItem(STORAGE,JSON.stringify(vault));}
+async function openVault(password,record){if(record.version!==1||record.kdf!=='PBKDF2-SHA256'||record.iterations!==ITER)throw Error('Nepodporovaný formát zálohy');const candidate=await derive(password,unb64(record.salt));const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(record.iv)},candidate,unb64(record.ciphertext));const parsed=JSON.parse(decoder.decode(plain));if(!Array.isArray(parsed))throw Error('Neplatná databáza');return {candidate,parsed};}
+function gate(){vault=JSON.parse(localStorage.getItem(STORAGE)||'null');$('gateTitle').textContent=vault?'Odomkni knižnicu':'Prvé nastavenie';$('gateDesc').textContent=vault?'Zadaj heslo k šifrovanej databáze.':'Vytvor šifrovanú databázu. Použi svoje existujúce heslo.';$('confirmWrap').classList.toggle('hidden',!!vault);$('unlock').textContent=vault?'Odomknúť':'Vytvoriť knižnicu';}
+function touch(){clearTimeout(timer);timer=setTimeout(lock,30*60*1000);}
+function lock(){clearTimeout(timer);key=null;data=[];$('password').value='';$('confirm').value='';$('app').classList.add('hidden');$('gate').classList.remove('hidden');gate();}
+async function unlock(){if(busy)return;busy=true;$('unlock').disabled=true;$('gateError').textContent='';try{const pw=$('password').value;if(!pw)throw Error('Zadaj heslo.');if(!vault){if(pw.length<12)throw Error('Použi heslo s aspoň 12 znakmi.');if(pw!==$('confirm').value)throw Error('Heslá sa nezhodujú.');vault={version:1,salt:b64(random(16))};key=await derive(pw,unb64(vault.salt));data=[];await seal();}else{const opened=await openVault(pw,vault);key=opened.candidate;data=opened.parsed;}$('password').value='';$('confirm').value='';$('gate').classList.add('hidden');$('app').classList.remove('hidden');render();touch();}catch(e){$('gateError').textContent='Nedá sa odomknúť: '+(e.name==='OperationError'?'nesprávne heslo alebo poškodená databáza':e.message);}finally{busy=false;$('unlock').disabled=false;}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function render(){const q=$('search').value.toLocaleLowerCase('sk'),f=$('filter').value,sort=$('sort').value;$('total').textContent=data.length;$('done').textContent=data.filter(x=>x.status==='read').length;$('reading').textContent=data.filter(x=>x.status==='reading').length;$('todo').textContent=data.filter(x=>x.status==='unread').length;
+const filtered=data.filter(x=>(f==='all'||x.status===f)&&[x.title,x.author,x.category,x.notes].join(' ').toLocaleLowerCase('sk').includes(q)).sort((a,b)=>String(a[sort]||'').localeCompare(String(b[sort]||''),'sk'));
+$('books').innerHTML=filtered.length?filtered.map(x=>'<div class="book"><div><b>'+esc(x.title)+'</b><div class="tiny">'+esc(x.author)+' · '+esc(x.category)+'</div><span class="tag">'+({read:'✅ Prečítané',reading:'📖 Rozčítané',unread:'⏳ Neprečítané'}[x.status]||'Neznámy stav')+'</span>'+(x.notes?'<p>'+esc(x.notes).replace(/\n/g,'<br>')+'</p>':'')+'</div><div class="actions"><button class="secondary" data-edit="'+esc(x.id)+'">Upraviť</button><button class="danger" data-del="'+esc(x.id)+'">Zmazať</button></div></div>').join(''):'<p>Zatiaľ žiadne knihy. Pridaj prvú knihu alebo importuj katalóg.</p>';}
+function reset(){for(const id of ['editId','title','author','category','notes'])$(id).value='';$('status').value='unread';}
+async function save(){const title=$('title').value.trim();if(!title)return alert('Vyplň názov knihy.');const id=$('editId').value||crypto.randomUUID(),entry={id,title,author:$('author').value.trim(),category:$('category').value.trim(),status:$('status').value,notes:$('notes').value};const i=data.findIndex(x=>x.id===id);if(i<0)data.push(entry);else data[i]=entry;await seal();reset();render();touch();}
+$('books').addEventListener('click',async e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-del]');if(edit){const x=data.find(b=>b.id===edit.dataset.edit);if(!x)return;for(const field of ['id','title','author','category','status','notes'])$(field==='id'?'editId':field).value=x[field]||'';window.scrollTo({top:0,behavior:'smooth'});}if(del&&confirm('Naozaj odstrániť knihu?')){data=data.filter(b=>b.id!==del.dataset.del);await seal();render();}});
+function download(name,content){const blob=new Blob([content],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('backup').onclick=()=>{if(!vault)return;download('books-encrypted-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(vault,null,2));touch();};
+$('restoreBtn').onclick=()=>{if(confirm('Import zálohy nahradí lokálnu databázu. Pokračovať?')){$('file').dataset.mode='restore';$('file').click();}};
+$('importJson').onclick=()=>{$('file').dataset.mode='books';$('file').click();};
+$('file').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>5*1024*1024)throw Error('Súbor je príliš veľký');const parsed=JSON.parse(await file.text());if(e.target.dataset.mode==='restore'){if(!parsed.salt||!parsed.ciphertext||!parsed.iv)throw Error('Neplatná šifrovaná záloha');localStorage.setItem(STORAGE,JSON.stringify(parsed));lock();alert('Záloha nahraná. Odomkni ju heslom.');}else{if(!Array.isArray(parsed))throw Error('Očakávam JSON pole kníh');for(const row of parsed){if(typeof row.title!=='string'||!row.title.trim())continue;const entry={id:crypto.randomUUID(),title:row.title.slice(0,250),author:String(row.author||'').slice(0,150),category:String(row.category||'').slice(0,100),status:['read','reading','unread'].includes(row.status)?row.status:'unread',notes:String(row.notes||'').slice(0,12000)};const idx=data.findIndex(x=>x.title.toLowerCase()===entry.title.toLowerCase()&&x.author.toLowerCase()===entry.author.toLowerCase());if(idx<0)data.push(entry);}await seal();render();alert('Import dokončený.');}}catch(err){alert('Import zlyhal: '+err.message);}finally{e.target.value='';}};
+$('unlock').onclick=unlock;$('password').onkeydown=e=>{if(e.key==='Enter')unlock()};$('lock').onclick=lock;$('saveBook').onclick=save;$('resetForm').onclick=reset;for(const id of ['search','filter','sort'])$(id).addEventListener('input',render);for(const ev of ['pointerdown','keydown'])document.addEventListener(ev,()=>{if(key)touch();},{passive:true});document.addEventListener('visibilitychange',()=>{if(document.hidden&&key)touch();});gate();
+</script></body></html>
