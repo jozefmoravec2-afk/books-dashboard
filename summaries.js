@@ -5,9 +5,10 @@ window.BOOK_SUMMARIES = {
     "Keď ťa niekto vyprovokuje, oddel fakt od vlastnej interpretácie."
   ],
   "Inteligentní investor": [
-    "Základy hodnotového investovania: vnútorná hodnota, bezpečnostná rezerva a disciplína.",
-    "Cena akcie a hodnota firmy nie sú to isté.",
-    "Pri poklese trhu hodnotíš podnik, nie náladu investorov."
+    "Benjamin Graham učí investovať ako vlastník podniku, nie ako špekulant na pohyb ceny. Rozlišuje defenzívneho a podnikavého investora, vysvetľuje bezpečnostnú rezervu, analýzu akcií a dlhopisov, diverzifikáciu a psychológiu trhu. Pán Trh (Mr. Market) ti každý deň ponúka cenu, ale nemusíš ju prijať.",
+    "Kvalitná firma nemusí byť kvalitnou investíciou, ak je príliš drahá. Oddeľ hodnotu podniku od jeho trhovej ceny, vytvor si bezpečnostnú rezervu a rozhoduj sa podľa dôkazov, nie emócií. Výnos nie je odmenou za aktivitu, ale za rozumné riziko a trpezlivosť.",
+    "Pred nákupom porovnaj podniky podľa finančnej sily, ziskovosti, stability, dividend, dlhu a ceny. Pri kapitole 13 Graham ukazuje, že Eltra a Emhart s P/E približne 10–12 boli konzervatívnejšie ocenené než Emerson Electric a Emery Air Freight s P/E 30–38. Aj skvelý podnik môže byť zlý nákup. Vlastné pravidlo: skóre kvality firmy drž oddelene od valuácie; až potom rozhodni o nákupe.",
+    "Kľúčové koncepty: investor vs. špekulant; defenzívny vs. podnikavý investor; Mr. Market; margin of safety; diverzifikácia; riziko trvalej straty kapitálu; cena vs. hodnota; kapitola 13 – porovnanie štyroch spoločností. Prepojenie na Graham 2.0: hodnotenie kvality podniku a valuácia sú dve samostatné otázky."
   ],
   "The Art of Strategy": [
     "Teória hier vysvetľuje rozhodovanie, keď výsledok závisí aj od rozhodnutí iných.",
